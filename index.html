@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Зикр</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Scheherazade+New:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --base-font-size: 16px;
+    --bg:        #f7f3ec;
+    --bg2:       #efe9df;
+    --surface:   #ffffff;
+    --border:    #ddd5c4;
+    --border2:   #c9bca8;
+    --text:      #2c2418;
+    --text2:     #6b5d4a;
+    --text3:     #a8967e;
+    --gold:      #8a6a2a;
+    --gold2:     #b38a3a;
+    --gold3:     #c9a84c;
+    --green:     #2d5a3d;
+    --green2:    #3d7a52;
+    --arabic:    #1a3020;
+    --shadow:    rgba(44, 36, 24, 0.08);
+    --shadow2:   rgba(44, 36, 24, 0.14);
+    --overlay1:  rgba(138,106,42,0.06);
+    --overlay2:  rgba(45,90,61,0.05);
+    --card-hover: rgba(138,106,42,0.03);
+  }
+
+  /* ── ТУНГИ РЕЖИМ ── */
+  [data-theme="dark"] {
+    --bg:        #1a1814;
+    --bg2:       #22201b;
+    --surface:   #252220;
+    --border:    #3a3530;
+    --border2:   #4a443d;
+    --text:      #e8dfc8;
+    --text2:     #b8ac94;
+    --text3:     #847a68;
+    --gold:      #d4a94a;
+    --gold2:     #e0b858;
+    --gold3:     #f0cc6c;
+    --green:     #4a8863;
+    --green2:    #5fa57a;
+    --arabic:    #e8dfc8;
+    --shadow:    rgba(0, 0, 0, 0.3);
+    --shadow2:   rgba(0, 0, 0, 0.5);
+    --overlay1:  rgba(212,169,74,0.05);
+    --overlay2:  rgba(74,136,99,0.04);
+    --card-hover: rgba(212,169,74,0.04);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    touch-action: manipulation;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'PT Serif', Georgia, serif;
+    min-height: 100vh;
+    line-height: 1.6;
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+
+  /* Subtle texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% 0%, var(--overlay1) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 100%, var(--overlay2) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── HEADER ── */
+  header {
+    text-align: center;
+    padding: 96px 0 40px;
+  }
+
+  .logo-arabic {
+    font-family: 'Scheherazade New', serif;
+    font-size: clamp(32px, 7vw, 52px);
+    color: var(--arabic);
+    line-height: 1.5;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .logo-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 300;
+    letter-spacing: 10px;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .logo-sub {
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: var(--text3);
+    text-transform: uppercase;
+    font-weight: 300;
+  }
+
+  .header-line {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 28px 0 0;
+  }
+
+  .header-line::before,
+  .header-line::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border2), transparent);
+  }
+
+  .header-ornament {
+    color: var(--gold2);
+    font-size: 16px;
+    letter-spacing: 6px;
+  }
+
+  /* ── SECTION GROUPS ── */
+  .group {
+    margin-bottom: 8px;
+  }
+
+  /* Group header (clickable) */
+  .group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+
+  .group-header:hover {
+    border-color: var(--border2);
+    box-shadow: 0 4px 16px var(--shadow2);
+  }
+
+  .group.open .group-header {
+    border-radius: 14px 14px 0 0;
+    border-bottom-color: transparent;
+    background: var(--surface);
+    box-shadow: 0 2px 0 var(--shadow);
+  }
+
+  .group-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .group-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, var(--overlay1), var(--overlay2));
+    border: 1px solid var(--border);
+  }
+
+  .group-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.5px;
+  }
+
+  .group-meta {
+    font-size: 13px;
+    color: var(--text3);
+    margin-top: 1px;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+  }
+
+  .group-chevron {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text3);
+    font-size: 12px;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .group.open .group-chevron {
+    transform: rotate(180deg);
+    border-color: var(--gold3);
+    color: var(--gold2);
+  }
+
+  /* Group body */
+  .group-body {
+    display: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px var(--shadow);
+  }
+
+  .group.open .group-body {
+    display: block;
+    animation: slideDown 0.3s ease;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── CARD ── */
+  .card {
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    transition: background 0.2s, border-color 0.4s ease;
+  }
+
+  .card:last-child { border-bottom: none; }
+
+  .card:hover { background: var(--card-hover); }
+
+  .card-number {
+    position: absolute;
+    top: 22px;
+    left: 22px;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gold);
+    background: linear-gradient(135deg, var(--overlay1), var(--overlay2));
+    border: 1px solid var(--gold3);
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 1px 2px var(--shadow);
+  }
+
+  /* Жума картосидаги арабча матн тамғага тегмасин */
+  #body-juma .card, #body-duo-boshida .card { padding-left: 72px; }
+
+  .card-arabic {
+    font-family: 'Scheherazade New', serif;
+    font-size: calc(var(--base-font-size) + 6px);
+    color: var(--arabic);
+    text-align: right;
+    direction: rtl;
+    line-height: 2;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  #body-juma .card-arabic {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .card-transliteration {
+    font-size: 14px;
+    color: var(--green2);
+    font-style: italic;
+    margin-bottom: 10px;
+    line-height: 1.7;
+    font-weight: 300;
+    letter-spacing: 0.2px;
+  }
+
+  .card-translation {
+    font-size: 15px;
+    color: var(--text2);
+    line-height: 1.75;
+    margin-bottom: 14px;
+    font-weight: 400;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .card-count {
+    font-size: 15px;
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── COUNTER ── */
+  .counter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cnt-btn {
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--border2);
+    background: var(--bg2);
+    color: var(--text2);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+
+  .cnt-btn:hover {
+    background: var(--border);
+    color: var(--text);
+  }
+
+  .cnt-btn.plus {
+    background: var(--green);
+    border-color: var(--green2);
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 18px;
+    box-shadow: 0 2px 8px rgba(45,90,61,0.25);
+  }
+
+  .cnt-btn.plus:active { transform: scale(0.93); }
+  .cnt-btn.plus:hover { background: var(--green2); box-shadow: 0 4px 12px rgba(45,90,61,0.35); }
+
+  .cnt-val {
+    min-width: 32px;
+    text-align: center;
+    font-size: 17px;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* ── SCROLL TOP ── */
+  #scrollTop {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 42px;
+    height: 42px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    color: var(--text2);
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px var(--shadow2);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    z-index: 100;
+  }
+
+  #scrollTop.visible { display: flex; }
+  #scrollTop:hover { border-color: var(--gold3); color: var(--gold); }
+
+  /* ── ТЕМА ТУГМАЧАСИ ── */
+  #themeToggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 42px;
+    height: 42px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 50%;
+    color: var(--gold);
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 101;
+    font-family: inherit;
+  }
+
+  #themeToggle:hover {
+    border-color: var(--gold3);
+    box-shadow: 0 6px 20px var(--shadow2);
+    transform: scale(1.05);
+  }
+
+  #themeToggle:active { transform: scale(0.95); }
+
+  .theme-icon {
+    transition: transform 0.4s ease, opacity 0.3s ease;
+  }
+
+  /* Font Controls */
+  .font-controls {
+    position: fixed;
+    top: 72px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 101;
+  }
+
+  .font-btn {
+    width: 42px;
+    height: 36px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px var(--shadow);
+    font-family: inherit;
+  }
+
+  .font-btn:hover {
+    border-color: var(--gold3);
+    box-shadow: 0 6px 20px var(--shadow2);
+    transform: scale(1.05);
+  }
+
+  .font-btn:active {
+    transform: scale(0.95);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 480px) {
+    .card { padding: 20px 18px; }
+    .card-number { left: 14px; top: 18px; min-width: 30px; height: 30px; font-size: 13px; }
+    #body-juma .card, #body-duo-boshida .card { padding-left: 58px; }
+    .group-header { padding: 15px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<button id="themeToggle" onclick="toggleTheme()" aria-label="Режимни ўзгартириш">
+  <span class="theme-icon" id="themeIcon">☾</span>
+</button>
+
+<div class="font-controls">
+  <button onclick="changeFontSize(2)" class="font-btn" aria-label="Шрифтни катталаштириш">A+</button>
+  <button onclick="changeFontSize(-2)" class="font-btn" aria-label="Шрифтни кичрайтириш">A-</button>
+</div>
+
+<div class="wrap">
+
+  <header>
+    <div class="logo-title">Зикр</div>
+    <div class="header-line">
+      <span class="header-ornament">✦ ✦ ✦</span>
+    </div>
+  </header>
+
+  <!-- ДУО БОШИДА -->
+  <div class="group" id="g-duo-boshida">
+    <div class="group-header" onclick="toggle('g-duo-boshida')">
+      <div class="group-title-wrap">
+        <div>
+          <div class="group-title">Дуо боши ва охирида айтиладиган илтижолар</div>
+        </div>
+      </div>
+      <div class="group-chevron">▾</div>
+    </div>
+    <div class="group-body" id="body-duo-boshida">
+
+      <div class="card">
+        <div class="card-number">1</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ بِأَنَّ لَكَ الْحَمْدَ، لاَ إِلَهَ إِلاَّ أَنْتَ الْمَنَّانُ، بَدِيعَ السَّمَاوَاتِ وَالأَرْضِ، يَا ذَا الْجَلاَلِ وَالإِكْرَامِ، يَا حَيُّ يَا قَيُّومُ</div>
+        <div class="card-footer"><span class="card-count">Дуодан олдин айтилади</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">2</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ بِأَنِّي أَشْهَدُ أَنَّكَ أَنْتَ اللَّهُ، لاَ إِلَهَ إِلاَّ أَنْتَ، الأَحَدُ الصَّمَدُ، الَّذِي لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُنْ لَهُ كُفُواً أَحَدٌ</div>
+        <div class="card-footer"><span class="card-count">Дуодан олдин айтилади</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">3</div>
+        <div class="card-arabic">اللَّهُمَّ لَكَ الْحَمْدُ أَنْتَ نُورُ السَّمَاوَاتِ وَالأَرْضِ، وَلَكَ الْحَمْدُ أَنْتَ قَيِّمُ السَّمَاوَاتِ وَالأَرْضِ، وَلَكَ الْحَمْدُ أَنْتَ رَبُّ السَّمَاوَاتِ وَالأَرْضِ وَمَنْ فِيهِنَّ، أَنْتَ الْحَقُّ، وَوَعْدُكَ الْحَقُّ، وَقَوْلُكَ الْحَقُّ، وَلِقَاؤُكَ الْحَقُّ، وَالْجَنَّةُ حَقٌّ، وَالنَّارُ حَقٌّ، وَالنَّبِيُّونَ حَقٌّ، وَالسَّاعَةُ حَقٌّ</div>
+        <div class="card-footer"><span class="card-count">Дуодан олдин айтилади</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">4</div>
+        <div class="card-arabic">لاَ إِلَهَ إِلاَّ أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ</div>
+        <div class="card-footer"><span class="card-count">Дуодан олдин айтилади</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">5</div>
+        <div class="card-arabic">اللَّهُمَّ رَبَّنَا لَكَ الْحَمْدُ، مِلْءَ السَّمَاوَاتِ وَالأَرْضِ، وَمِلْءَ مَا شِئْتَ مِنْ شَيْءٍ بَعْدُ، أَهْلَ الثَّنَاءِ وَالْمَجْدِ، أَحَقُّ مَا قَالَ الْعَبْدُ، وَكُلُّنَا لَكَ عَبْدٌ، اللَّهُمَّ لاَ مَانِعَ لِمَا أَعْطَيْتَ، وَلاَ مُعْطِيَ لِمَا مَنَعْتَ، وَلاَ يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ</div>
+        <div class="card-footer"><span class="card-count">Дуодан олдин айтилади</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">6</div>
+        <div class="card-arabic">اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ، وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ، وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ</div>
+        <div class="card-footer"><span class="card-count">Дуо охирида айтилади</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">7</div>
+        <div class="card-arabic">رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنْتَ السَّمِيعُ الْعَلِيمُ</div>
+        <div class="card-footer"><span class="card-count">Дуо охирида айтилади</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ЭРТАЛАБ -->
+  <div class="group" id="g-ertalab">
+    <div class="group-header" onclick="toggle('g-ertalab')">
+      <div class="group-title-wrap">
+        <div>
+          <div class="group-title">Эрталабки зикрлар</div>
+          <div class="group-meta">Бомдод намозидан сўнг</div>
+        </div>
+      </div>
+      <div class="group-chevron">▾</div>
+    </div>
+    <div class="group-body" id="body-ertalab">
+      <div class="card">
+        <div class="card-arabic">أَعُوذُ بِاللَّهِ مِنَ الشَّيطَانِ الرَّجِيمِ<br><br>﴿اللَّهُ لاَ إِلَهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَوَاتِ وَالْأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ﴾</div>
+        <div class="card-footer"><span class="card-count">1 марта — Оятул Курси</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ<br><br>﴿قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُواً أَحَدٌ﴾</div>
+        <div class="card-footer"><span class="card-count">3 марта — Ихлос сураси</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ<br><br>﴿قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ﴾</div>
+        <div class="card-footer"><span class="card-count">3 марта — Фалақ сураси</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ<br><br>﴿قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَهِ النَّاسِ ۝ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ﴾</div>
+        <div class="card-footer"><span class="card-count">3 марта — Нос сураси</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لاَ إِلَهَ إلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ النُّشُورُ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلاَّ أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لاَ يَغْفِرُ الذُّنوبَ إِلاَّ أَنْتَ</div>
+        <div class="card-footer"><span class="card-count">1 марта — Сайидул истиғфор</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَصْبَحْتُ أُشْهِدُكَ، وَأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلاَئِكَتِكَ، وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلاَّ أَنْتَ وَحْدَكَ لاَ شَرِيكَ لَكَ، وَأَنَّ مُحَمَّداً عَبْدُكَ وَرَسُولُكَ</div>
+        <div class="card-footer"><span class="card-count">4 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ مَا أَصْبَحَ بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لاَ شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لاَ إِلَهَ إِلاَّ أَنْتَ. اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْكُفْرِ، وَالفَقْرِ، وَأَعُوذُ بِكَ مِنْ عَذَابِ القَبْرِ، لاَ إِلَهَ إِلاَّ أَنْتَ</div>
+        <div class="card-footer"><span class="card-count">3 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">حَسْبِيَ اللَّهُ لاَ إِلَهَ إِلاَّ هُوَ عَلَيهِ تَوَكَّلتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ</div>
+        <div class="card-footer"><span class="card-count">7 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ: فِي دِينِي وَدُنْيَايَ وَأَهْلِي، وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي، وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَينِ يَدَيَّ، وَمِنْ خَلْفِي، وَعَنْ يَمِينِي، وَعَنْ شِمَالِي، وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ عَالِمَ الغَيْبِ وَالشَّهَادَةِ فَاطِرَ السَّمَوَاتِ وَالْأَرْضِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي، وَمِنْ شَرِّ الشَّيْطانِ وَشَرَكِهِ، وَأَنْ أَقْتَرِفَ عَلَى نَفْسِي سُوءاً، أَوْ أَجُرَّهُ إِلَى مُسْلِمٍ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">بِسْمِ اللَّهِ الَّذِي لاَ يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلاَ فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ</div>
+        <div class="card-footer"><span class="card-count">3 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">رَضِيتُ بِاللَّهِ رَبَّاً، وَبِالْإِسْلاَمِ دِيناً، وَبِمُحَمَّدٍ صلى الله عليه وسلم نَبِيّاً</div>
+        <div class="card-footer"><span class="card-count">3 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغيثُ أَصْلِحْ لِي شَأْنِيَ كُلَّهُ وَلاَ تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ رَبِّ الْعَالَمِينَ، اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذَا الْيَوْمِ: فَتْحَهُ، وَنَصْرَهُ، وَنورَهُ، وَبَرَكَتَهُ، وَهُدَاهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِيهِ وَشَرِّ مَا بَعْدَهُ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">أَصْبَحْنا عَلَى فِطْرَةِ الْإِسْلاَمِ، وَعَلَى كَلِمَةِ الْإِخْلاَصِ، وَعَلَى دِينِ نَبِيِّنَا مُحَمَّدٍ صلى الله عليه وسلم، وَعَلَى مِلَّةِ أَبِينَا إِبْرَاهِيمَ، حَنِيفاً مُسْلِماً وَمَا كَانَ مِنَ الْمُشرِكِينَ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</div>
+        <div class="card-footer"><span class="card-count">100 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ</div>
+        <div class="card-footer"><span class="card-count">10 марта (ёки 1)</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ</div>
+        <div class="card-footer"><span class="card-count">100 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ: عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ</div>
+        <div class="card-footer"><span class="card-count">3 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْماً نَافِعاً، وَرِزْقاً طَيِّباً، وَعَمَلاً مُتَقَبَّلاً</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ</div>
+        <div class="card-footer"><span class="card-count">100 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبَيِّنَا مُحَمَّدٍ</div>
+        <div class="card-footer"><span class="card-count">10 марта</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- КЕЧҚУРУН -->
+  <div class="group" id="g-kechqurun">
+    <div class="group-header" onclick="toggle('g-kechqurun')">
+      <div class="group-title-wrap">
+        <div>
+          <div class="group-title">Кечқурунги зикрлар</div>
+          <div class="group-meta">Аср намозидан сўнг</div>
+        </div>
+      </div>
+      <div class="group-chevron">▾</div>
+    </div>
+    <div class="group-body" id="body-kechqurun">
+      <div class="card">
+        <div class="card-arabic">أَعُوذُ بِاللَّهِ مِنَ الشَّيطَانِ الرَّجِيمِ<br><br>﴿اللَّهُ لاَ إِلَهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَوَاتِ وَالْأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ﴾</div>
+        <div class="card-footer"><span class="card-count">1 марта — Оятул Курси</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ<br><br>﴿قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُواً أَحَدٌ﴾</div>
+        <div class="card-footer"><span class="card-count">3 марта — Ихлос сураси</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ<br><br>﴿قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ﴾</div>
+        <div class="card-footer"><span class="card-count">3 марта — Фалақ сураси</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ<br><br>﴿قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَهِ النَّاسِ ۝ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ﴾</div>
+        <div class="card-footer"><span class="card-count">3 марта — Нос сураси</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لاَ إِلَهَ إلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيرَ مَا بَعْدَهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ الْمَصِيرُ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلاَّ أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لاَ يَغْفِرُ الذُّنوبَ إِلاَّ أَنْتَ</div>
+        <div class="card-footer"><span class="card-count">1 марта — Сайидул истиғфор</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ، وَأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلاَئِكَتِكَ، وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلاَّ أَنْتَ وَحْدَكَ لاَ شَرِيكَ لَكَ، وَأَنَّ مُحَمَّداً عَبْدُكَ وَرَسُولُكَ</div>
+        <div class="card-footer"><span class="card-count">4 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ مَا أَمْسَى بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لاَ شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لاَ إِلَهَ إِلاَّ أَنْتَ. اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْكُفْرِ، وَالفَقْرِ، وَأَعُوذُ بِكَ مِنْ عَذَابِ القَبْرِ، لاَ إِلَهَ إِلاَّ أَنْتَ</div>
+        <div class="card-footer"><span class="card-count">3 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">حَسْبِيَ اللَّهُ لاَ إِلَهَ إِلاَّ هُوَ عَلَيهِ تَوَكَّلتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ</div>
+        <div class="card-footer"><span class="card-count">7 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ: فِي دِينِي وَدُنْيَايَ وَأَهْلِي، وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي، وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَينِ يَدَيَّ، وَمِنْ خَلْفِي، وَعَنْ يَمِينِي، وَعَنْ شِمَالِي، وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ عَالِمَ الغَيْبِ وَالشَّهَادَةِ فَاطِرَ السَّمَوَاتِ وَالْأَرْضِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي، وَمِنْ شَرِّ الشَّيْطانِ وَشَرَكِهِ، وَأَنْ أَقْتَرِفَ عَلَى نَفْسِي سُوءاً، أَوْ أَجُرَّهُ إِلَى مُسْلِمٍ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">بِسْمِ اللَّهِ الَّذِي لاَ يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلاَ فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ</div>
+        <div class="card-footer"><span class="card-count">3 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">رَضِيتُ بِاللَّهِ رَبَّاً، وَبِالْإِسْلاَمِ دِيناً، وَبِمُحَمَّدٍ صلى الله عليه وسلم نَبِيّاً</div>
+        <div class="card-footer"><span class="card-count">3 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغيثُ أَصْلِحْ لِي شَأْنِيَ كُلَّهُ وَلاَ تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ رَبِّ الْعَالَمِينَ، اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذِهِ اللَّيْلَةِ: فَتْحَهَا، وَنَصْرَهَا، وَنورَهَا، وَبَرَكَتَهَا، وَهُدَاهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِيهَا، وَشَرِّ مَا بَعْدَهَا</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">أَمْسَيْنَا عَلَى فِطْرَةِ الْإِسْلاَمِ، وَعَلَى كَلِمَةِ الْإِخْلاَصِ، وَعَلَى دِينِ نَبِيِّنَا مُحَمَّدٍ صلى الله عليه وسلم، وَعَلَى مِلَّةِ أَبِينَا إِبْرَاهِيمَ، حَنِيفاً مُسْلِماً وَمَا كَانَ مِنَ الْمُشرِكِينَ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</div>
+        <div class="card-footer"><span class="card-count">100 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ</div>
+        <div class="card-footer"><span class="card-count">3 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ</div>
+        <div class="card-footer"><span class="card-count">100 марта</span></div>
+      </div>
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبَيِّنَا مُحَمَّدٍ</div>
+        <div class="card-footer"><span class="card-count">10 марта</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ЖУМА -->
+  <div class="group" id="g-juma">
+    <div class="group-header" onclick="toggle('g-juma')">
+      <div class="group-title-wrap">
+        <div>
+          <div class="group-title">Жума куни дуолари</div>
+          <div class="group-meta">Аср намозидан Шом вақтигача бўлган оралиқда</div>
+        </div>
+      </div>
+      <div class="group-chevron">▾</div>
+    </div>
+    <div class="group-body" id="body-juma">
+
+      <div style="padding: 20px 24px 16px; border-bottom: 1px solid var(--border); background: var(--overlay1);">
+        <p style="font-size: 14px; color: var(--text2); line-height: 1.75; font-style: italic; text-align: center; margin: 0;">
+          Бу тўплам — жума кунидаги ижобат вақтидан унумли фойдаланиш учун бир имконият. Бу ердаги дуолар Қуръон ва саҳиҳ ҳадислардан олинган бўлса-да, уларни айнан жума куни ўқиш ҳақида махсус кўрсатма йўқ. Биз фақат энг гўзал дуоларни жамладикки, токи сиз ушбу фазилатли кунда Аллоҳга осон ва қулай тарзда илтижо қилинг.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-number">1</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ الْجَنَّةَ وَأَعُوذُ بِكَ مِنَ النَّارِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">2</div>
+        <div class="card-arabic">رَبِّ ابْنِ لِي عِنْدَكَ بَيْتاً فِي الْجَنَّةِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">3</div>
+        <div class="card-arabic">رَبِّ أَلْحِقْنِي بِالصَّالِحِينَ، وَاجْعَلْ لِي لِسَانَ صِدْقٍ فِي الآخِرِينَ، وَاجْعَلْنِي مِنْ وَرَثَةِ جَنَّةِ النَّعِيمِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">4</div>
+        <div class="card-arabic">رَبَّنَا اصْرِفْ عَنَّا عَذَابَ جَهَنَّمَ إِنَّ عَذَابَهَا كَانَ غَرَاماً</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">5</div>
+        <div class="card-arabic">اللَّهُمَّ رَبَّ جِبْرَائِيلَ وَمِيكَائِيلَ، وَرَبَّ إِسْرَافِيلَ، أَعُوذُ بِكَ مِنْ حَرِّ النَّارِ، وَمِنْ عَذَابِ الْقَبْرِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">6</div>
+        <div class="card-arabic">رَبَّنَا إِنَّنَا آمَنَّا فَاغْفِرْ لَنَا ذُنُوبَنَا وَقِنَا عَذَابَ النَّارِ، وَكَفِّرْ عَنَّا سَيِّئَاتِنَا وَتَوَفَّنَا مَعَ الأَبْرَارِ، رَبَّنَا وَآتِنَا مَا وَعَدتَّنَا عَلَى رُسُلِكَ وَلاَ تُخْزِنَا يَوْمَ الْقِيَامَةِ إِنَّكَ لاَ تُخْلِفُ الْمِيعَادَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">7</div>
+        <div class="card-arabic">رَبَّنَا اغْفِرْ لَنَا ذُنُوبَنَا وَإِسْرَافَنَا فِي أَمْرِنَا</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">8</div>
+        <div class="card-arabic">رَبَّنَا ظَلَمْنَا أَنفُسَنَا وَإِن لَّمْ تَغْفِرْ لَنَا وَتَرْحَمْنَا لَنَكُونَنَّ مِنَ الْخَاسِرِينَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">9</div>
+        <div class="card-arabic">رَبَّنَا آمَنَّا فَاغْفِرْ لَنَا وَارْحَمْنَا وَأَنْتَ خَيْرُ الرَّاحِمِينَ، رَبِّ اغْفِرْ وَارْحَمْ وَأَنْتَ خَيْرُ الرَّاحِمِينَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">10</div>
+        <div class="card-arabic">رَبَّنَا اغْفِرْ لَنَا وَلإِخْوَانِنَا الَّذِينَ سَبَقُونَا بِالإِيمَانِ وَلاَ تَجْعَلْ فِي قُلُوبِنَا غِلاًّ لِّلَّذِينَ آمَنُوا رَبَّنَا إِنَّكَ رَؤُوفٌ رَّحِيمٌ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">11</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ يَا اللَّهُ الأَحَدُ الصَّمَدُ الَّذِي لَمْ يَلِدْ وَلَمْ يُولَدْ وَلَمْ يَكُنْ لَهُ كُفُواً أَحَدٌ، أَنْ تَغْفِرَ لِي ذُنُوبِي، إِنَّكَ أَنْتَ الْغَفُورُ الرَّحِيمُ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">12</div>
+        <div class="card-arabic">اللَّهُمَّ اغْفِرْ لِي خَطِيئَتِي وَجَهْلِي، وَإِسْرَافِي فِي أَمْرِي، وَمَا أَنْتَ أَعْلَمُ بِهِ مِنِّي، اللَّهُمَّ اغْفِرْ لِي جِدِّي وَهَزْلِي، وَخَطَئِي وَعَمْدِي، وَكُلُّ ذَلِكَ عِنْدِي، اللَّهُمَّ اغْفِرْ لِي مَا قَدَّمْتُ وَمَا أَخَّرْتُ، وَمَا أَسْرَرْتُ وَمَا أَعْلَنْتُ، وَمَا أَنْتَ أَعْلَمُ بِهِ مِنِّي، أَنْتَ الْمُقَدِّمُ وَأَنْتَ الْمُؤَخِّرُ، وَأَنْتَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">13</div>
+        <div class="card-arabic">اللَّهُمَّ أَنْتَ رَبِّي لاَ إِلَهَ إِلاَّ أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ لَكَ بِذَنْبِي فَاغْفِرْ لِي، فَإِنَّهُ لاَ يَغْفِرُ الذُّنُوبَ إِلاَّ أَنْتَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">14</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي ظَلَمْتُ نَفْسِي ظُلْماً كَثِيراً، وَلاَ يَغْفِرُ الذُّنُوبَ إِلاَّ أَنْتَ، فَاغْفِرْ لِي مَغْفِرَةً مِنْ عِنْدِكَ، وَارْحَمْنِي إِنَّكَ أَنْتَ الْغَفُورُ الرَّحِيمُ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">15</div>
+        <div class="card-arabic">اللَّهُمَّ اغْفِرْ لِي ذَنْبِي كُلَّهُ، دِقَّهُ وَجِلَّهُ، وَأَوَّلَهُ وَآخِرَهُ، وَعَلاَنِيَتَهُ وَسِرَّهُ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">16</div>
+        <div class="card-arabic">اللَّهُمَّ طَهِّرْنِي بِالثَّلْجِ وَالْبَرَدِ، وَالْمَاءِ الْبَارِدِ، اللَّهُمَّ طَهِّرْنِي مِنَ الذُّنُوبِ وَالْخَطَايَا، كَمَا يُنَقَّى الثَّوْبُ الأَبْيَضُ مِنَ الْوَسَخِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">17</div>
+        <div class="card-arabic">رَبِّ اغْفِرْ لِي، وَتُبْ عَلَيَّ، إِنَّكَ أَنْتَ التَّوَّابُ الرَّحِيمُ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">18</div>
+        <div class="card-arabic">اللَّهُمَّ اغْفِرْ لِحَيِّنَا وَمَيِّتِنَا، وَصَغِيرِنَا وَكَبِيرِنَا، وَذَكَرِنَا وَأُنْثَانَا، وَشَاهِدِنَا وَغَائِبِنَا، اللَّهُمَّ مَنْ أَحْيَيْتَهُ مِنَّا فَأَحْيِهِ عَلَى الإِيمَانِ، وَمَنْ تَوَفَّيْتَهُ مِنَّا فَتَوَفَّهُ عَلَى الإِسْلاَمِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">19</div>
+        <div class="card-arabic">اللَّهُمَّ اغْفِرْ لِي ذُنُوبِي وَخَطَايَايَ، اللَّهُمَّ أَنْعِشْنِي، وَاجْبُرْنِي، وَاهْدِنِي لِصَالِحِ الأَعْمَالِ وَالأَخْلاَقِ، فَإِنَّهُ لاَ يَهْدِي لِصَالِحِهَا، وَلاَ يَصْرِفُ سَيِّئَهَا إِلاَّ أَنْتَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">20</div>
+        <div class="card-arabic">اللَّهُمَّ اغْفِرْ لِي ذَنْبِي، وَأَخْسِئْ شَيْطَانِي، وَفُكَّ رِهَانِي</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">21</div>
+        <div class="card-arabic">اللَّهُمَّ إِنَّا نَعُوذُ بِكَ مِنْ أَنْ نُشْرِكَ بِكَ شَيْئاً نَعْلَمُهُ، وَنَسْتَغْفِرُكَ لِمَا لاَ نَعْلَمُ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">22</div>
+        <div class="card-arabic">اللَّهُمَّ اغْفِرْ لِي، وَارْحَمْنِي، وَاهْدِنِي، وَاجْبُرْنِي، وَعَافِنِي، وَارْزُقْنِي، وَارْفَعْنِي</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">23</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى، وَالْعَفَافَ وَالْغِنَى</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">24</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالسَّدَادَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">25</div>
+        <div class="card-arabic">اللَّهُمَّ أَسْتَهْدِيكَ لأَرْشَدِ أَمْرِي، وَأَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">26</div>
+        <div class="card-arabic">اللَّهُمَّ اهْدِنِي فِيمَنْ هَدَيْتَ، وَعَافِنِي فِيمَنْ عَافَيْتَ، وَتَوَلَّنِي فِيمَنْ تَوَلَّيْتَ، وَبَارِكْ لِي فِيمَا أَعْطَيْتَ، وَقِنِي شَرَّ مَا قَضَيْتَ، إِنَّكَ تَقْضِي وَلاَ يُقْضَى عَلَيْكَ، وَإِنَّهُ لاَ يَذِلُّ مَنْ وَالَيْتَ، وَلاَ يَعِزُّ مَنْ عَادَيْتَ، تَبَارَكْتَ رَبَّنَا وَتَعَالَيْتَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">27</div>
+        <div class="card-arabic">اللَّهُمَّ اجْعَلْ فِي قَلْبِي نُوراً، وَفِي بَصَرِي نُوراً، وَفِي سَمْعِي نُوراً، وَعَنْ يَمِينِي نُوراً، وَعَنْ يَسَارِي نُوراً، وَفَوْقِي نُوراً، وَتَحْتِي نُوراً، وَأَمَامِي نُوراً، وَخَلْفِي نُوراً، وَاجْعَلْ لِي نُوراً</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">28</div>
+        <div class="card-arabic">رَبَّنَا آتِنَا مِنْ لَدُنْكَ رَحْمَةً وَهَيِّئْ لَنَا مِنْ أَمْرِنَا رَشَداً</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">29</div>
+        <div class="card-arabic">رَبَّنَا لاَ تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا وَهَبْ لَنَا مِنْ لَدُنْكَ رَحْمَةً إِنَّكَ أَنْتَ الْوَهَّابُ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">30</div>
+        <div class="card-arabic">يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَى دِينِكَ، اللَّهُمَّ مُصَرِّفَ الْقُلُوبِ، صَرِّفْ قُلُوبَنَا إِلَى طَاعَتِكَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">31</div>
+        <div class="card-arabic">اللَّهُمَّ لَكَ أَسْلَمْتُ، وَبِكَ آمَنْتُ، وَعَلَيْكَ تَوَكَّلْتُ، وَإِلَيْكَ أَنَبْتُ، وَبِكَ خَاصَمْتُ، اللَّهُمَّ إِنِّي أَعُوذُ بِعِزَّتِكَ، لاَ إِلَهَ إِلاَّ أَنْتَ، أَنْ تُضِلَّنِي، أَنْتَ الْحَيُّ الَّذِي لاَ يَمُوتُ، وَالْجِنُّ وَالإِنْسُ يَمُوتُونَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">32</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ الثَّبَاتَ فِي الأَمْرِ، وَالْعَزِيمَةَ عَلَى الرُّشْدِ، وَأَسْأَلُكَ مُوجِبَاتِ رَحْمَتِكَ، وَعَزَائِمَ مَغْفِرَتِكَ، وَأَسْأَلُكَ شُكْرَ نِعْمَتِكَ، وَحُسْنَ عِبَادَتِكَ، وَأَسْأَلُكَ قَلْباً سَلِيماً، وَلِسَاناً صَادِقاً، وَأَسْأَلُكَ مِنْ خَيْرِ مَا تَعْلَمُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا تَعْلَمُ، وَأَسْتَغْفِرُكَ لِمَا تَعْلَمُ، إِنَّكَ أَنْتَ عَلاَّمُ الْغُيُوبِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">33</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ أَنْ أَضِلَّ أَوْ أُضَلَّ، أَوْ أَزِلَّ أَوْ أُزَلَّ، أَوْ أَظْلِمَ أَوْ أُظْلَمَ، أَوْ أَجْهَلَ أَوْ يُجْهَلَ عَلَيَّ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">34</div>
+        <div class="card-arabic">رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">35</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنَ الْخَيْرِ كُلِّهِ عَاجِلِهِ وَآجِلِهِ، مَا عَلِمْتُ مِنْهُ وَمَا لَمْ أَعْلَمْ، وَأَعُوذُ بِكَ مِنَ الشَّرِّ كُلِّهِ عَاجِلِهِ وَآجِلِهِ، مَا عَلِمْتُ مِنْهُ وَمَا لَمْ أَعْلَمْ، اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ خَيْرِ مَا سَأَلَكَ عَبْدُكَ وَنَبِيُّكَ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا عَاذَ بِهِ عَبْدُكَ وَنَبِيُّكَ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْجَنَّةَ وَمَا قَرَّبَ إِلَيْهَا مِنْ قَوْلٍ أَوْ عَمَلٍ، وَأَعُوذُ بِكَ مِنَ النَّارِ وَمَا قَرَّبَ إِلَيْهَا مِنْ قَوْلٍ أَوْ عَمَلٍ، وَأَسْأَلُكَ أَنْ تَجْعَلَ كُلَّ قَضَاءٍ قَضَيْتَهُ لِي خَيْراً</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">36</div>
+        <div class="card-arabic">اللَّهُمَّ اغْفِرْ لِي ذَنْبِي، وَوَسِّعْ لِي فِي دَارِي، وَبَارِكْ لِي فِيمَا رَزَقْتَنِي</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">37</div>
+        <div class="card-arabic">اللَّهُمَّ انْفَعْنِي بِمَا عَلَّمْتَنِي، وَعَلِّمْنِي مَا يَنْفَعُنِي، وَزِدْنِي عِلْماً</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">38</div>
+        <div class="card-arabic">اللَّهُمَّ اقْسِمْ لَنَا مِنْ خَشْيَتِكَ مَا يَحُولُ بَيْنَنَا وَبَيْنَ مَعَاصِيكَ، وَمِنْ طَاعَتِكَ مَا تُبَلِّغُنَا بِهِ جَنَّتَكَ، وَمِنَ الْيَقِينِ مَا تُهَوِّنُ بِهِ عَلَيْنَا مُصِيبَاتِ الدُّنْيَا، وَمَتِّعْنَا بِأَسْمَاعِنَا وَأَبْصَارِنَا وَقُوَّتِنَا مَا أَحْيَيْتَنَا، وَاجْعَلْهُ الْوَارِثَ مِنَّا، وَاجْعَلْ ثَأْرَنَا عَلَى مَنْ ظَلَمَنَا، وَانْصُرْنَا عَلَى مَنْ عَادَانَا، وَلاَ تَجْعَلْ مُصِيبَتَنَا فِي دِينِنَا، وَلاَ تَجْعَلِ الدُّنْيَا أَكْبَرَ هَمِّنَا وَلاَ مَبْلَغَ عِلْمِنَا، وَلاَ تُسَلِّطْ عَلَيْنَا مَنْ لاَ يَرْحَمُنَا</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">39</div>
+        <div class="card-arabic">اللَّهُمَّ فَاطِرَ السَّمَاوَاتِ وَالأَرْضِ أَنْتَ وَلِيِّي فِي الدُّنْيَا وَالآخِرَةِ تَوَفَّنِي مُسْلِماً وَأَلْحِقْنِي بِالصَّالِحِينَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">40</div>
+        <div class="card-arabic">اللَّهُمَّ أَعِنَّا عَلَى شُكْرِكَ، وَذِكْرِكَ، وَحُسْنِ عِبَادَتِكَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">41</div>
+        <div class="card-arabic">اللَّهُمَّ أَحْسَنْتَ خَلْقِي، فَأَحْسِنْ خُلُقِي</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">42</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ وَرَحْمَتِكَ، فَإِنَّهُ لاَ يَمْلِكُهَا إِلاَّ أَنْتَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">43</div>
+        <div class="card-arabic">رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">44</div>
+        <div class="card-arabic">رَبَّنَا آمَنَّا فَاكْتُبْنَا مَعَ الشَّاهِدِينَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">45</div>
+        <div class="card-arabic">رَبِّ زِدْنِي عِلْماً</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">46</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ حُبَّكَ، وَحُبَّ مَنْ يُحِبُّكَ، وَحُبَّ عَمَلٍ يُقَرِّبُنِي إِلَى حُبِّكَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">47</div>
+        <div class="card-arabic">رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ وَلِمَنْ دَخَلَ بَيْتِيَ مُؤْمِناً وَلِلْمُؤْمِنِينَ وَالْمُؤْمِنَاتِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">48</div>
+        <div class="card-arabic">رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيراً</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">49</div>
+        <div class="card-arabic">رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ وَاجْعَلْنَا لِلْمُتَّقِينَ إِمَاماً</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">50</div>
+        <div class="card-arabic">رَبِّ هَبْ لِي مِنْ لَدُنْكَ ذُرِّيَّةً طَيِّبَةً إِنَّكَ سَمِيعُ الدُّعَاءِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">51</div>
+        <div class="card-arabic">رَبِّ اجْعَلْنِي مُقِيمَ الصَّلاَةِ وَمِنْ ذُرِّيَّتِي رَبَّنَا وَتَقَبَّلْ دُعَاءِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">52</div>
+        <div class="card-arabic">رَبِّ أَوْزِعْنِي أَنْ أَشْكُرَ نِعْمَتَكَ الَّتِي أَنْعَمْتَ عَلَيَّ وَعَلَى وَالِدَيَّ وَأَنْ أَعْمَلَ صَالِحاً تَرْضَاهُ وَأَصْلِحْ لِي فِي ذُرِّيَّتِي إِنِّي تُبْتُ إِلَيْكَ وَإِنِّي مِنَ الْمُسْلِمِينَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">53</div>
+        <div class="card-arabic">اللَّهُمَّ أَصْلِحْ لِي دِينِي الَّذِي هُوَ عِصْمَةُ أَمْرِي، وَأَصْلِحْ لِي دُنْيَايَ الَّتِي فِيهَا مَعَاشِي، وَأَصْلِحْ لِي آخِرَتِي الَّتِي فِيهَا مَعَادِي، وَاجْعَلِ الْحَيَاةَ زِيَادَةً لِي فِي كُلِّ خَيْرٍ، وَاجْعَلِ الْمَوْتَ رَاحَةً لِي مِنْ كُلِّ شَرٍّ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">54</div>
+        <div class="card-arabic">اللَّهُمَّ بِعِلْمِكَ الْغَيْبَ، وَقُدْرَتِكَ عَلَى الْخَلْقِ، أَحْيِنِي مَا عَلِمْتَ الْحَيَاةَ خَيْراً لِي، وَتَوَفَّنِي إِذَا عَلِمْتَ الْوَفَاةَ خَيْراً لِي</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">55</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ ضِيقِ الدُّنْيَا، وَضِيقِ الْمَقَامِ يَوْمَ الْقِيَامَةِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">56</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ قَلْبٍ لاَ يَخْشَعُ، وَمِنْ دُعَاءٍ لاَ يُسْمَعُ، وَمِنْ نَفْسٍ لاَ تَشْبَعُ، وَمِنْ عِلْمٍ لاَ يَنْفَعُ، أَعُوذُ بِكَ مِنْ هَؤُلاَءِ الأَرْبَعِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">57</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ شَرِّ مَا عَمِلْتُ، وَمِنْ شَرِّ مَا لَمْ أَعْمَلْ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">58</div>
+        <div class="card-arabic">اللَّهُمَّ لاَ تُخْزِنِي يَوْمَ الْقِيَامَةِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">59</div>
+        <div class="card-arabic">اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">60</div>
+        <div class="card-arabic">اللَّهُمَّ اجْعَلْنِي مِنَ التَّوَّابِينَ، وَاجْعَلْنِي مِنَ الْمُتَطَهِّرِينَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">61</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ خَشْيَتَكَ فِي الْغَيْبِ وَالشَّهَادَةِ، وَأَسْأَلُكَ كَلِمَةَ الْحَقِّ فِي الرِّضَا وَالْغَضَبِ، وَأَسْأَلُكَ الْقَصْدَ فِي الْفَقْرِ وَالْغِنَى، وَأَسْأَلُكَ نَعِيماً لاَ يَنْفَدُ، وَأَسْأَلُكَ قُرَّةَ عَيْنٍ لاَ تَنْقَطِعُ، وَأَسْأَلُكَ الرِّضَاءَ بَعْدَ الْقَضَاءِ، وَأَسْأَلُكَ بَرْدَ الْعَيْشِ بَعْدَ الْمَوْتِ، وَأَسْأَلُكَ لَذَّةَ النَّظَرِ إِلَى وَجْهِكَ، وَالشَّوْقَ إِلَى لِقَائِكَ فِي غَيْرِ ضَرَّاءَ مُضِرَّةٍ، وَلاَ فِتْنَةٍ مُضِلَّةٍ، اللَّهُمَّ زَيِّنَّا بِزِينَةِ الإِيمَانِ، وَاجْعَلْنَا هُدَاةً مُهْتَدِينَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">62</div>
+        <div class="card-arabic">اللَّهُمَّ فَاطِرَ السَّمَاوَاتِ وَالأَرْضِ، عَالِمَ الْغَيْبِ وَالشَّهَادَةِ، لاَ إِلَهَ إِلاَّ أَنْتَ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي، وَمِنْ شَرِّ الشَّيْطَانِ وَشِرْكِهِ، وَأَنْ أَقْتَرِفَ عَلَى نَفْسِي سُوءاً أَوْ أَجُرَّهُ إِلَى مُسْلِمٍ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">63</div>
+        <div class="card-arabic">يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ، أَصْلِحْ لِي شَأْنِي كُلَّهُ، وَلاَ تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">64</div>
+        <div class="card-arabic">اللَّهُمَّ اكْفِنِي بِحَلاَلِكَ عَنْ حَرَامِكَ، وَأَغْنِنِي بِفَضْلِكَ عَمَّنْ سِوَاكَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">65</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي عَبْدُكَ، ابْنُ عَبْدِكَ، ابْنُ أَمَتِكَ، نَاصِيَتِي بِيَدِكَ، مَاضٍ فِيَّ حُكْمُكَ، عَدْلٌ فِيَّ قَضَاؤُكَ، أَسْأَلُكَ بِكُلِّ اسْمٍ هُوَ لَكَ، سَمَّيْتَ بِهِ نَفْسَكَ، أَوْ عَلَّمْتَهُ أَحَداً مِنْ خَلْقِكَ، أَوْ أَنْزَلْتَهُ فِي كِتَابِكَ، أَوِ اسْتَأْثَرْتَ بِهِ فِي عِلْمِ الْغَيْبِ عِنْدَكَ، أَنْ تَجْعَلَ الْقُرْآنَ رَبِيعَ قَلْبِي، وَنُورَ صَدْرِي، وَجِلاَءَ حُزْنِي، وَذَهَابَ هَمِّي</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">66</div>
+        <div class="card-arabic">اللَّهُمَّ رَبَّ السَّمَاوَاتِ وَرَبَّ الأَرْضِ وَرَبَّ الْعَرْشِ الْعَظِيمِ، رَبَّنَا وَرَبَّ كُلِّ شَيْءٍ، فَالِقَ الْحَبِّ وَالنَّوَى، وَمُنْزِلَ التَّوْرَاةِ وَالإِنْجِيلِ وَالْفُرْقَانِ، أَعُوذُ بِكَ مِنْ شَرِّ كُلِّ شَيْءٍ أَنْتَ آخِذٌ بِنَاصِيَتِهِ، اللَّهُمَّ أَنْتَ الأَوَّلُ فَلَيْسَ قَبْلَكَ شَيْءٌ، وَأَنْتَ الآخِرُ فَلَيْسَ بَعْدَكَ شَيْءٌ، وَأَنْتَ الظَّاهِرُ فَلَيْسَ فَوْقَكَ شَيْءٌ، وَأَنْتَ الْبَاطِنُ فَلَيْسَ دُونَكَ شَيْءٌ، اقْضِ عَنَّا الدَّيْنَ، وَأَغْنِنَا مِنَ الْفَقْرِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">67</div>
+        <div class="card-arabic">اللَّهُمَّ لاَ سَهْلَ إِلاَّ مَا جَعَلْتَهُ سَهْلاً، وَأَنْتَ تَجْعَلُ الْحَزْنَ إِذَا شِئْتَ سَهْلاً</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">68</div>
+        <div class="card-arabic">اللَّهُمَّ رَحْمَتَكَ أَرْجُو، فَلاَ تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ، وَأَصْلِحْ لِي شَأْنِي كُلَّهُ، لاَ إِلَهَ إِلاَّ أَنْتَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">69</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">70</div>
+        <div class="card-arabic">اللَّهُمَّ اجْعَلْ أَوْسَعَ رِزْقِكَ عَلَيَّ عِنْدَ كِبَرِ سِنِّي، وَانْقِطَاعِ عُمُرِي</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">71</div>
+        <div class="card-arabic">اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">72</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ، اللَّهُمَّ أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي، وَآمِنْ رَوْعَاتِي، وَاحْفَظْنِي مِنْ بَيْنِ يَدَيَّ، وَمِنْ خَلْفِي، وَعَنْ يَمِينِي، وَعَنْ شِمَالِي، وَمِنْ فَوْقِي، وَأَعُوذُ بِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">73</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ الْمُعَافَاةَ فِي الدُّنْيَا وَالآخِرَةِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">74</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ، وَالْيَقِينَ فِي الآخِرَةِ وَالأُولَى</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">75</div>
+        <div class="card-arabic">اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لاَ إِلَهَ إِلاَّ أَنْتَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">76</div>
+        <div class="card-arabic">اللَّهُمَّ مَتِّعْنِي بِسَمْعِي وَبَصَرِي حَتَّى تَجْعَلَهُمَا الْوَارِثَ مِنِّي، وَعَافِنِي فِي دِينِي وَجَسَدِي، وَانْصُرْنِي مِمَّنْ ظَلَمَنِي حَتَّى تُرِيَنِي فِيهِ ثَأْرِي</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">77</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْعَجْزِ وَالْكَسَلِ، وَالْجُبْنِ وَالْبُخْلِ، وَالْهَرَمِ وَالْقَسْوَةِ، وَالْغَفْلَةِ، وَالْعَيْلَةِ وَالذِّلَّةِ وَالْمَسْكَنَةِ، وَأَعُوذُ بِكَ مِنَ الْفَقْرِ وَالْكُفْرِ وَالْفُسُوقِ، وَالشِّقَاقِ، وَالنِّفَاقِ وَالسُّمْعَةِ وَالرِّيَاءِ، وَأَعُوذُ بِكَ مِنَ الصَّمَمِ وَالْبَكَمِ وَالْجُنُونِ، وَالْجُذَامِ، وَالْبَرَصِ، وَسَيِّئِ الأَسْقَامِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">78</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْجُوعِ، فَإِنَّهُ بِئْسَ الضَّجِيعُ، وَأَعُوذُ بِكَ مِنَ الْخِيَانَةِ، فَإِنَّهَا بِئْسَتِ الْبِطَانَةُ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">79</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْجُبْنِ وَالْبُخْلِ، وَسُوءِ الْعُمُرِ، وَفِتْنَةِ الصَّدْرِ، وَعَذَابِ الْقَبْرِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">80</div>
+        <div class="card-arabic">اللَّهُمَّ آتِ نَفْسِي تَقْوَاهَا، وَزَكِّهَا أَنْتَ خَيْرُ مَنْ زَكَّاهَا، أَنْتَ وَلِيُّهَا وَمَوْلاَهَا، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عِلْمٍ لاَ يَنْفَعُ، وَمِنْ قَلْبٍ لاَ يَخْشَعُ، وَمِنْ نَفْسٍ لاَ تَشْبَعُ، وَمِنْ دَعْوَةٍ لاَ يُسْتَجَابُ لَهَا</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">81</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالْعَجْزِ وَالْكَسَلِ، وَالْبُخْلِ وَالْجُبْنِ، وَضَلَعِ الدَّيْنِ، وَغَلَبَةِ الرِّجَالِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">82</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ جَهْدِ الْبَلاَءِ، وَدَرَكِ الشَّقَاءِ، وَسُوءِ الْقَضَاءِ، وَشَمَاتَةِ الأَعْدَاءِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">83</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ يَوْمِ السَّوْءِ، وَمِنْ لَيْلَةِ السَّوْءِ، وَمِنْ سَاعَةِ السَّوْءِ، وَمِنْ صَاحِبِ السَّوْءِ، وَمِنْ جَارِ السَّوْءِ فِي دَارِ الْمُقَامَةِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">84</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَدْمِ، وَأَعُوذُ بِكَ مِنَ التَّرَدِّي، وَأَعُوذُ بِكَ مِنَ الْغَرَقِ، وَالْحَرَقِ، وَالْهَرَمِ، وَأَعُوذُ بِكَ أَنْ يَتَخَبَّطَنِي الشَّيْطَانُ عِنْدَ الْمَوْتِ، وَأَعُوذُ بِكَ أَنْ أَمُوتَ فِي سَبِيلِكَ مُدْبِراً، وَأَعُوذُ بِكَ أَنْ أَمُوتَ لَدِيغاً</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">85</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ زَوَالِ نِعْمَتِكَ، وَتَحَوُّلِ عَافِيَتِكَ، وَفُجَاءَةِ نِقْمَتِكَ، وَجَمِيعِ سَخَطِكَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">86</div>
+        <div class="card-arabic">اللَّهُمَّ أَعُوذُ بِرِضَاكَ مِنْ سَخَطِكَ، وَبِمُعَافَاتِكَ مِنْ عُقُوبَتِكَ، وَأَعُوذُ بِكَ مِنْكَ، لاَ أُحْصِي ثَنَاءً عَلَيْكَ أَنْتَ كَمَا أَثْنَيْتَ عَلَى نَفْسِكَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">87</div>
+        <div class="card-arabic">اللَّهُمَّ جَنِّبْنِي مُنْكَرَاتِ الأَخْلاَقِ، وَالأَهْوَاءِ، وَالأَعْمَالِ، وَالأَدْوَاءِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">88</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ شَرِّ سَمْعِي، وَمِنْ شَرِّ بَصَرِي، وَمِنْ شَرِّ لِسَانِي، وَمِنْ شَرِّ قَلْبِي، وَمِنْ شَرِّ مَنِيِّي</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">89</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْبَرَصِ، وَالْجُنُونِ، وَالْجُذَامِ، وَمِنْ سَيِّئِ الأَسْقَامِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">90</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْفَقْرِ، وَالْقِلَّةِ، وَالذِّلَّةِ، وَأَعُوذُ بِكَ مِنْ أَنْ أَظْلِمَ، أَوْ أُظْلَمَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">91</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَسْأَلُكَ فِعْلَ الْخَيْرَاتِ، وَتَرْكَ الْمُنْكَرَاتِ، وَحُبَّ الْمَسَاكِينِ، وَإِذَا أَرَدْتَ بِعِبَادِكَ فِتْنَةً فَاقْبِضْنِي إِلَيْكَ غَيْرَ مَفْتُونٍ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">92</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْكَسَلِ وَالْهَرَمِ، وَالْمَأْثَمِ وَالْمَغْرَمِ، وَمِنْ فِتْنَةِ الْقَبْرِ وَعَذَابِ الْقَبْرِ، وَمِنْ فِتْنَةِ النَّارِ وَعَذَابِ النَّارِ، وَمِنْ شَرِّ فِتْنَةِ الْغِنَى، وَأَعُوذُ بِكَ مِنْ فِتْنَةِ الْفَقْرِ، وَأَعُوذُ بِكَ مِنْ فِتْنَةِ الْمَسِيحِ الدَّجَّالِ، اللَّهُمَّ اغْسِلْ عَنِّي خَطَايَايَ بِمَاءِ الثَّلْجِ وَالْبَرَدِ، وَنَقِّ قَلْبِي مِنَ الْخَطَايَا كَمَا نَقَّيْتَ الثَّوْبَ الأَبْيَضَ مِنَ الدَّنَسِ، وَبَاعِدْ بَيْنِي وَبَيْنَ خَطَايَايَ كَمَا بَاعَدْتَ بَيْنَ الْمَشْرِقِ وَالْمَغْرِبِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">93</div>
+        <div class="card-arabic">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ النَّارِ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْفِتَنِ مَا ظَهَرَ مِنْهَا وَمَا بَطَنَ، وَأَعُوذُ بِكَ مِنْ فِتْنَةِ الْمَسِيحِ الدَّجَّالِ، وَأَعُوذُ بِكَ مِنْ فِتْنَةِ الْمَحْيَا، وَفِتْنَةِ الْمَمَاتِ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْمَأْثَمِ وَالْمَغْرَمِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">94</div>
+        <div class="card-arabic">رَبَّنَا لاَ تَجْعَلْنَا فِتْنَةً لِلَّذِينَ كَفَرُوا، رَبَّنَا لاَ تَجْعَلْنَا فِتْنَةً لِلْقَوْمِ الظَّالِمِينَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">95</div>
+        <div class="card-arabic">رَبَّنَا اجْعَلْ لَنَا مِنْ لَدُنْكَ وَلِيّاً وَاجْعَلْ لَنَا مِنْ لَدُنْكَ نَصِيراً</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">96</div>
+        <div class="card-arabic">رَبِّ أَدْخِلْنِي مُدْخَلَ صِدْقٍ وَأَخْرِجْنِي مُخْرَجَ صِدْقٍ وَاجْعَلْ لِي مِنْ لَدُنْكَ سُلْطَاناً نَصِيراً</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">97</div>
+        <div class="card-arabic">رَبِّ نَجِّنِي مِنَ الْقَوْمِ الظَّالِمِينَ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">98</div>
+        <div class="card-arabic">رَبِّ أَعُوذُ بِكَ مِنْ هَمَزَاتِ الشَّيَاطِينِ، وَأَعُوذُ بِكَ رَبِّ أَنْ يَحْضُرُونِ</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">99</div>
+        <div class="card-arabic">رَبِّ أَعِنِّي وَلاَ تُعِنْ عَلَيَّ، وَانْصُرْنِي وَلاَ تَنْصُرْ عَلَيَّ، وَامْكُرْ لِي وَلاَ تَمْكُرْ عَلَيَّ، وَاهْدِنِي وَيَسِّرْ هُدَايَ إِلَيَّ، وَانْصُرْنِي عَلَى مَنْ بَغَى عَلَيَّ، اللَّهُمَّ اجْعَلْنِي لَكَ شَاكِراً، لَكَ ذَاكِراً، لَكَ رَاهِباً، لَكَ مِطْوَاعاً إِلَيْكَ، مُخْبِتاً أَوْ مُنِيباً، رَبِّ تَقَبَّلْ تَوْبَتِي، وَاغْسِلْ حَوْبَتِي، وَأَجِبْ دَعْوَتِي، وَثَبِّتْ حُجَّتِي، وَاهْدِ قَلْبِي، وَسَدِّدْ لِسَانِي، وَاسْلُلْ سَخِيمَةَ قَلْبِي</div>
+      </div>
+
+      <div class="card">
+        <div class="card-number">100</div>
+        <div class="card-arabic">اللَّهُمَّ احْفَظْنِي بِالإِسْلاَمِ قَائِماً، وَاحْفَظْنِي بِالإِسْلاَمِ قَاعِداً، وَاحْفَظْنِي بِالإِسْلاَمِ رَاقِداً، وَلاَ تُشْمِتْ بِي عَدُوّاً حَاسِداً، وَاللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ كُلِّ خَيْرٍ خَزَائِنُهُ بِيَدِكَ، وَأَعُوذُ بِكَ مِنْ كُلِّ شَرٍّ خَزَائِنُهُ بِيَدِكَ</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- РУҚИЯ -->
+  <div class="group" id="g-ruqiya">
+    <div class="group-header" onclick="toggle('g-ruqiya')">
+      <div class="group-title-wrap">
+        <div>
+          <div class="group-title">Руқия</div>
+          <div class="group-meta">Шайтон, кўз тегиш ва сеҳрга қарши руқия</div>
+        </div>
+      </div>
+      <div class="group-chevron">▾</div>
+    </div>
+    <div class="group-body" id="body-ruqiya">
+
+      <div style="padding: 20px 24px 16px; border-bottom: 1px solid var(--border); background: var(--overlay1);">
+        <p style="font-size: 16px; color: var(--arabic); line-height: 1.8; text-align: center; margin: 0; font-family: 'Scheherazade New', serif;">
+          أَعُوذُ بِاللَّهِ السَّمِيعِ الْعَلِيمِ مِنَ الشَّيْطَانِ الرَّجِيمِ<br>بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ ۝ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ۝ الرَّحْمَنِ الرَّحِيمِ ۝ مَالِكِ يَوْمِ الدِّينِ ۝ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ۝ اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ ۝ صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلاَ الضَّالِّينَ</div>
+        <div class="card-footer"><span class="card-count">Фотиҳа сураси</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">الْحَمْدُ لِلَّهِ الَّذِي لَهُ مَا فِي السَّمَوَاتِ وَمَا فِي الأَرْضِ وَلَهُ الْحَمْدُ فِي الآخِرَةِ وَهُوَ الْحَكِيمُ الْخَبِيرُ</div>
+        <div class="card-footer"><span class="card-count">Сабаъ: 1</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">هُوَ الْحَيُّ لا إِلَهَ إِلاَّ هُوَ فَادْعُوهُ مُخْلِصِينَ لَهُ الدِّينَ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ</div>
+        <div class="card-footer"><span class="card-count">Ғофир: 65</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">اللَّهُ لاَ إِلَهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ</div>
+        <div class="card-footer"><span class="card-count">Оятул Курси (Бақара: 255)</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">آمَنَ الرَّسُولُ بِمَا أُنْزِلَ إِلَيْهِ مِن رَّبِّهِ وَالْمُؤْمِنُونَ كُلٌّ آمَنَ بِاللَّهِ وَمَلاَئِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ لاَ نُفَرِّقُ بَيْنَ أَحَدٍ مِّن رُّسُلِهِ وَقَالُوا سَمِعْنَا وَأَطَعْنَا غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ الْمَصِيرُ ۝ لاَ يُكَلِّفُ اللَّهُ نَفْساً إِلاَّ وُسْعَهَا لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ رَبَّنَا لاَ تُؤَاخِذْنَا إِن نَّسِينَا أَوْ أَخْطَأْنَا رَبَّنَا وَلاَ تَحْمِلْ عَلَيْنَا إِصْراً كَمَا حَمَلْتَهُ عَلَى الَّذِينَ مِن قَبْلِنَا رَبَّنَا وَلاَ تُحَمِّلْنَا مَا لاَ طَاقَةَ لَنَا بِهِ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا أَنتَ مَوْلاَنَا فَانصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ</div>
+        <div class="card-footer"><span class="card-count">Бақара: 285-286</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">فَقَاتِلُوهُمْ يُعَذِّبْهُمُ اللَّهُ بِأَيْدِيكُمْ وَيُخْزِهِمْ وَيَنصُرْكُمْ عَلَيْهِمْ وَيَشْفِ صُدُورَ قَوْمٍ مُّؤْمِنِينَ</div>
+        <div class="card-footer"><span class="card-count">Тавба: 14</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">يَا أَيُّهَا النَّاسُ قَدْ جَاءَتْكُم مَّوْعِظَةٌ مِّن رَّبِّكُمْ وَشِفَاءٌ لِّمَا فِي الصُّدُورِ وَهُدًى وَرَحْمَةٌ لِّلْمُؤْمِنِينَ</div>
+        <div class="card-footer"><span class="card-count">Юнус: 57</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">فَاللَّهُ خَيْرٌ حَافِظاً وَهُوَ أَرْحَمُ الرَّاحِمِينَ</div>
+        <div class="card-footer"><span class="card-count">Юсуф: 64</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">وَأَوْحَى رَبُّكَ إِلَى النَّحْلِ أَنِ اتَّخِذِي مِنَ الْجِبَالِ بُيُوتاً وَمِنَ الشَّجَرِ وَمِمَّا يَعْرِشُونَ</div>
+        <div class="card-footer"><span class="card-count">Наҳл: 68</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">ثُمَّ كُلِي مِن كُلِّ الثَّمَرَاتِ فَاسْلُكِي سُبُلَ رَبِّكِ ذُلُلاً يَخْرُجُ مِن بُطُونِهَا شَرَابٌ مُّخْتَلِفٌ أَلْوَانُهُ فِيهِ شِفَاءٌ لِّلنَّاسِ إِنَّ فِي ذَلِكَ لآيَةً لِّقَوْمٍ يَتَفَكَّرُونَ</div>
+        <div class="card-footer"><span class="card-count">Наҳл: 69</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">وَنُنَزِّلُ مِنَ الْقُرْآنِ مَا هُوَ شِفَاءٌ وَرَحْمَةٌ لِّلْمُؤْمِنِينَ وَلاَ يَزِيدُ الظَّالِمِينَ إلاَّ خَسَاراً</div>
+        <div class="card-footer"><span class="card-count">Исроъ: 82</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">وَإِذَا مَرِضْتُ فَهُوَ يَشْفِينِ</div>
+        <div class="card-footer"><span class="card-count">Шуаро: 80</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">وَلَوْ جَعَلْنَاهُ قُرْآناً أَعْجَمِيّاً لَّقَالُوا لَوْلاَ فُصِّلَتْ آيَاتُهُ أَأَعْجَمِيٌّ وَعَرَبِيٌّ قُلْ هُوَ لِلَّذِينَ آمَنُوا هُدًى وَشِفَاءٌ</div>
+        <div class="card-footer"><span class="card-count">Фуссилат: 44</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ<br><br>﴿قُلْ يَا أَيُّهَا الْكَافِرُونَ ۝ لاَ أَعْبُدُ مَا تَعْبُدُونَ ۝ وَلاَ أَنتُمْ عَابِدُونَ مَا أَعْبُدُ ۝ وَلاَ أَنَا عَابِدٌ مَّا عَبَدتُّمْ ۝ وَلاَ أَنتُمْ عَابِدُونَ مَا أَعْبُدُ ۝ لَكُمْ دِينُكُمْ وَلِيَ دِينِ﴾</div>
+        <div class="card-footer"><span class="card-count">Кофирун сураси</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ<br><br>﴿قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُواً أَحَدٌ﴾</div>
+        <div class="card-footer"><span class="card-count">Ихлос сураси</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ<br><br>﴿قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ﴾</div>
+        <div class="card-footer"><span class="card-count">Фалақ сураси</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ<br><br>﴿قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَهِ النَّاسِ ۝ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ﴾</div>
+        <div class="card-footer"><span class="card-count">Нос сураси</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">لاَ إِلَهَ إِلاَّ اللَّهُ الْعَظِيمُ الْحَلِيمُ، لاَ إِلَهَ إِلاَّ اللَّهُ رَبُّ الْعَرْشِ الْعَظِيمِ، لاَ إِلَهَ إِلاَّ اللَّهُ رَبُّ السَّمَوَاتِ وَرَبُّ الأَرْضِ، وَرَبُّ الْعَرْشِ الْكَرِيمِ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، اللَّهُمَّ لاَ مَانِعَ لِمَا أَعْطَيْتَ وَلاَ مُعْطِيَ لِمَا مَنَعْتَ، وَلاَ يَنفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">أَعُوذُ بِاللَّهِ السَّمِيعِ الْعَلِيمِ مِنَ الشَّيْطَانِ الرَّجِيمِ، مِنْ هَمْزِهِ وَنَفْخِهِ وَنَفْثِهِ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">أُعِيذُكَ بِكَلِمَاتِ اللَّهِ التَّامَّةِ، مِنْ كُلِّ شَيْطَانٍ وَهَامَّةٍ، وَمِنْ كُلِّ عَيْنٍ لاَمَّةٍ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">بِسْمِ اللَّهِ الَّذِي لاَ يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الأَرْضِ وَلاَ فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ</div>
+        <div class="card-footer"><span class="card-count">3 марта</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">بِسْمِ اللَّهِ أَرْقِيكَ، مِنْ كُلِّ شَيْءٍ يُؤْذِيكَ، مِنْ شَرِّ كُلِّ نَفْسٍ أَوْ عَيْنِ حَاسِدٍ، اللَّهُ يَشْفِيكَ، بِسْمِ اللَّهِ أَرْقِيكَ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ أَذْهِبِ الْبَاسَ، رَبَّ النَّاسِ، اشْفِ وَأَنتَ الشَّافِي، لاَ شِفَاءَ إِلاَّ شِفَاؤُكَ، شِفَاءً لاَ يُغَادِرُ سَقَماً</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ أَهْدِنِي، وَأَرْزُقْنِي، وَعَافِنِي، وَأَرْحَمْنِي</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">رَبَّنَا اللَّهُ الَّذِي فِي السَّمَاءِ تَقَدَّسَ اسْمُكَ، أَمْرُكَ فِي السَّمَاءِ وَالأَرْضِ، كَمَا رَحْمَتُكَ فِي السَّمَاءِ فَاجْعَلْ رَحْمَتَكَ فِي الأَرْضِ، اغْفِرْ لَنَا حُوبَنَا وَخَطَايَانَا، أَنتَ رَبُّ الطَّيِّبِينَ، أَنزِلْ رَحْمَةً مِن رَحْمَتِكَ، وَشِفَاءً مِن شِفَائِكَ عَلَى هَذَا الْوَجَعِ فَيَبْرَأَ</div>
+        <div class="card-footer"><span class="card-count">3 марта</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">أَسْأَلُ اللَّهَ الْعَظِيمَ، رَبَّ الْعَرْشِ الْعَظِيمِ أَن يَشْفِيَكَ</div>
+        <div class="card-footer"><span class="card-count">7 марта</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ إِنِّي عَبْدُكَ، وَابْنُ عَبْدِكَ، وَابْنُ أَمَتِكَ، نَاصِيَتِي بِيَدِكَ، مَاضٍ فِيَّ حُكْمُكَ، عَدْلٌ فِيَّ قَضَاؤُكَ، أَسْأَلُكَ بِكُلِّ اسْمٍ هُوَ لَكَ ؛ سَمَّيْتَ بِهِ نَفْسَكَ، أَوْ أَنزَلْتَهُ فِي كِتَابِكَ، أَوْ عَلَّمْتَهُ أَحَداً مِن خَلْقِكَ، أَوِ اسْتَأْثَرْتَ بِهِ فِي عِلْمِ الْغَيْبِ عِنْدَكَ : أَن تَجْعَلَ الْقُرْآنَ رَبِيعَ قَلْبِي، وَنُورَ صَدْرِي، وَجِلاَءَ حُزْنِي، وَذَهَابَ هَمِّي</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ إِنَّا نَسْأَلُكَ مِنْ خَيْرِ مَا سَأَلَكَ مِنْهُ نَبِيُّكَ مُحَمَّدٌ ﷺ، وَنَعُوذُ بِكَ مِنْ شَرِّ مَا اسْتَعَاذَ مِنْهُ نَبِيُّكَ مُحَمَّدٌ ﷺ، وَأَنتَ الْمُسْتَعَانُ وَعَلَيْكَ الْبَلاَغُ، وَلاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، فِي الْعَالَمِينَ إِنَّكَ حَمِيدٌ مَجِيدٌ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-arabic">اللَّهُمَّ اجْعَلْ صَلاَتَكَ وَرَحْمَتَكَ وَبَرَكَاتِكَ عَلَى سَيِّدِ الْمُرْسَلِينَ، وَإِمَامِ الْمُتَّقِينَ، وَخَاتَمِ النَّبِيِّينَ، مُحَمَّدٍ عَبْدِكَ وَرَسُولِكَ إِمَامِ الْخَيْرِ، وَقَائِدِ الْبِرِّ، وَرَسُولِ الرَّحْمَةِ، اللَّهُمَّ ابْعَثْهُ مَقَاماً مَحْمُوداً يَغْبِطُهُ بِهِ الأَوَّلُونَ وَالآخِرُونَ</div>
+        <div class="card-footer"><span class="card-count">1 марта</span></div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  // ── ТЕМА ── 
+  // Саҳифа юкланишидан олдин темани ўрнатиш (милтиллашни олдини олиш)
+  (function() {
+    try {
+      const saved = localStorage.getItem('zikr-theme');
+      if (saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    } catch(e) {}
+  })();
+
+  function toggleTheme() {
+    const html = document.documentElement;
+    const icon = document.getElementById('themeIcon');
+    const current = html.getAttribute('data-theme');
+
+    if (current === 'dark') {
+      html.removeAttribute('data-theme');
+      icon.textContent = '☾';
+      try { localStorage.setItem('zikr-theme', 'light'); } catch(e) {}
+    } else {
+      html.setAttribute('data-theme', 'dark');
+      icon.textContent = '☀';
+      try { localStorage.setItem('zikr-theme', 'dark'); } catch(e) {}
+    }
+
+    // Иконкани юмшоқ айлантириш
+    icon.style.transform = 'rotate(360deg)';
+    setTimeout(() => { icon.style.transform = ''; }, 400);
+  }
+
+  // Юклангач иконкани тўғри кўрсатиш
+  window.addEventListener('DOMContentLoaded', () => {
+    const icon = document.getElementById('themeIcon');
+    if (document.documentElement.getAttribute('data-theme') === 'dark') {
+      icon.textContent = '☀';
+    }
+    
+    // Font size ni qayta tiklash
+    const savedFontSize = localStorage.getItem('zikr-font-size');
+    if (savedFontSize) {
+      document.documentElement.style.setProperty('--base-font-size', savedFontSize + 'px');
+    }
+  });
+
+  // Font size boshqaruvi
+  let currentFontSize = parseInt(localStorage.getItem('zikr-font-size')) || 16;
+
+  function changeFontSize(delta) {
+    currentFontSize += delta;
+    
+    // Min va max chegaralar
+    if (currentFontSize < 12) currentFontSize = 12;
+    if (currentFontSize > 24) currentFontSize = 24;
+    
+    // Font size o'zgarishi
+    document.documentElement.style.setProperty('--base-font-size', currentFontSize + 'px');
+    try { 
+      localStorage.setItem('zikr-font-size', currentFontSize); 
+    } catch(e) {}
+  }
+
+  function toggle(id) {
+    const g = document.getElementById(id);
+    g.classList.toggle('open');
+  }
+
+  // Counter
+  function inc(btn) {
+    const v = btn.parentElement.querySelector('.cnt-val');
+    v.textContent = +v.textContent + 1;
+    btn.style.transform = 'scale(0.88)';
+    setTimeout(() => btn.style.transform = '', 120);
+  }
+  function dec(btn) {
+    const v = btn.parentElement.querySelector('.cnt-val');
+    if (+v.textContent > 0) v.textContent = +v.textContent - 1;
+  }
+
+  // Scroll top
+  window.addEventListener('scroll', () => {
+    document.getElementById('scrollTop').classList.toggle('visible', scrollY > 260);
+  });
+
+  // iOS Safari - икки марта босиб яқинлашишни тўхтатиш
+  let lastTouchEnd = 0;
+  document.addEventListener('touchend', function(e) {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) {
+      e.preventDefault();
+    }
+    lastTouchEnd = now;
+  }, { passive: false });
+
+  // Gesture - иккита бармоқ билан яқинлаштиришни тўхтатиш
+  document.addEventListener('gesturestart', function(e) {
+    e.preventDefault();
+  });
+  document.addEventListener('gesturechange', function(e) {
+    e.preventDefault();
+  });
+  document.addEventListener('gestureend', function(e) {
+    e.preventDefault();
+  });
+</script>
+</body>
+</html>
