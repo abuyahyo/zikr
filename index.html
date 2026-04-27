@@ -94,15 +94,6 @@
     padding: 96px 0 40px;
   }
 
-  .logo-arabic {
-    font-family: 'Scheherazade New', serif;
-    font-size: clamp(32px, 7vw, 52px);
-    color: var(--arabic);
-    line-height: 1.5;
-    letter-spacing: 1px;
-    margin-bottom: 6px;
-  }
-
   .logo-title {
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: clamp(28px, 5vw, 40px);
@@ -111,14 +102,6 @@
     text-transform: uppercase;
     color: var(--text);
     margin-bottom: 4px;
-  }
-
-  .logo-sub {
-    font-size: 13px;
-    letter-spacing: 4px;
-    color: var(--text3);
-    text-transform: uppercase;
-    font-weight: 300;
   }
 
   .header-line {
@@ -178,19 +161,6 @@
     display: flex;
     align-items: center;
     gap: 14px;
-  }
-
-  .group-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-    background: linear-gradient(135deg, var(--overlay1), var(--overlay2));
-    border: 1px solid var(--border);
   }
 
   .group-title {
@@ -303,24 +273,6 @@
     border-bottom: none;
   }
 
-  .card-transliteration {
-    font-size: 14px;
-    color: var(--green2);
-    font-style: italic;
-    margin-bottom: 10px;
-    line-height: 1.7;
-    font-weight: 300;
-    letter-spacing: 0.2px;
-  }
-
-  .card-translation {
-    font-size: 15px;
-    color: var(--text2);
-    line-height: 1.75;
-    margin-bottom: 14px;
-    font-weight: 400;
-  }
-
   .card-footer {
     display: flex;
     justify-content: space-between;
@@ -334,56 +286,6 @@
     color: var(--gold);
     font-weight: 600;
     letter-spacing: 0.3px;
-  }
-
-  /* ── COUNTER ── */
-  .counter {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .cnt-btn {
-    width: 30px;
-    height: 30px;
-    border: 1px solid var(--border2);
-    background: var(--bg2);
-    color: var(--text2);
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s;
-    font-family: inherit;
-  }
-
-  .cnt-btn:hover {
-    background: var(--border);
-    color: var(--text);
-  }
-
-  .cnt-btn.plus {
-    background: var(--green);
-    border-color: var(--green2);
-    color: #fff;
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    font-size: 18px;
-    box-shadow: 0 2px 8px rgba(45,90,61,0.25);
-  }
-
-  .cnt-btn.plus:active { transform: scale(0.93); }
-  .cnt-btn.plus:hover { background: var(--green2); box-shadow: 0 4px 12px rgba(45,90,61,0.35); }
-
-  .cnt-val {
-    min-width: 32px;
-    text-align: center;
-    font-size: 17px;
-    color: var(--gold);
-    font-weight: 600;
   }
 
   /* ── SCROLL TOP ── */
@@ -1556,18 +1458,6 @@
   function toggle(id) {
     const g = document.getElementById(id);
     g.classList.toggle('open');
-  }
-
-  // Counter
-  function inc(btn) {
-    const v = btn.parentElement.querySelector('.cnt-val');
-    v.textContent = +v.textContent + 1;
-    btn.style.transform = 'scale(0.88)';
-    setTimeout(() => btn.style.transform = '', 120);
-  }
-  function dec(btn) {
-    const v = btn.parentElement.querySelector('.cnt-val');
-    if (+v.textContent > 0) v.textContent = +v.textContent - 1;
   }
 
   // Scroll top
