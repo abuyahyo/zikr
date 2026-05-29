@@ -366,7 +366,7 @@
     position: absolute;
     top: 52px;
     right: 0;
-    min-width: 210px;
+    min-width: 232px;
     background: var(--surface);
     border: 1px solid var(--border2);
     border-radius: 14px;
@@ -451,6 +451,38 @@
   .font-btn:hover { border-color: var(--gold3); }
   .font-btn:active { transform: scale(0.92); }
 
+  /* Script (алифбо) Controls */
+  .script-controls {
+    display: flex;
+    gap: 6px;
+  }
+
+  .script-btn {
+    height: 36px;
+    padding: 0 12px;
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text2);
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+
+  .script-btn:hover { border-color: var(--gold3); }
+  .script-btn:active { transform: scale(0.92); }
+
+  .script-btn.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #fffdf7;
+  }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 480px) {
     .card { padding: 20px 18px; }
@@ -481,6 +513,13 @@
       <div class="font-controls">
         <button onclick="changeFontSize(2)" class="font-btn" aria-label="Шрифтни катталаштириш">A+</button>
         <button onclick="changeFontSize(-2)" class="font-btn" aria-label="Шрифтни кичрайтириш">A-</button>
+      </div>
+    </div>
+    <div class="settings-row">
+      <span class="settings-label">Алифбо</span>
+      <div class="script-controls">
+        <button class="script-btn" data-script="cyrillic" onclick="setScript('cyrillic')">Кирил</button>
+        <button class="script-btn" data-script="latin" onclick="setScript('latin')">Lotin</button>
       </div>
     </div>
   </div>
@@ -1523,6 +1562,74 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeSettings();
   });
+
+  // ── АЛИФБО (кирилл ↔ лотин) ──
+  // Ўзбек кирилл → лотин транслитерацияси. Арабча матнда кирилл ҳарфи
+  // йўқлиги учун у ўзгармай ўтиб кетади.
+  function translit(str) {
+    const map = {
+      'а':'a','б':'b','в':'v','г':'g','д':'d','ж':'j','з':'z','и':'i','й':'y',
+      'к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r','с':'s','т':'t',
+      'у':'u','ф':'f','х':'x','ц':'ts','ч':'ch','ш':'sh','щ':'sh','ъ':'ʼ','ь':'',
+      'э':'e','ё':'yo','ю':'yu','я':'ya','ў':'oʻ','қ':'q','ғ':'gʻ','ҳ':'h'
+    };
+    const vowels = 'аеёиоуэюяўАЕЁИОУЭЮЯЎ';
+    const isCyr = (c) => c && /[Ѐ-ӿ]/.test(c);
+    let out = '';
+    for (let i = 0; i < str.length; i++) {
+      const ch = str[i];
+      const lower = ch.toLowerCase();
+      const isUpper = ch !== lower;
+      if (lower === 'е') {
+        const prev = str[i - 1];
+        // сўз бошида ёки унлидан кейин → "ye", акс ҳолда → "e"
+        const useYe = !isCyr(prev) || vowels.includes(prev);
+        let r = useYe ? 'ye' : 'e';
+        out += isUpper ? r[0].toUpperCase() + r.slice(1) : r;
+        continue;
+      }
+      if (Object.prototype.hasOwnProperty.call(map, lower)) {
+        let r = map[lower];
+        if (isUpper && r) r = r[0].toUpperCase() + r.slice(1);
+        out += r;
+      } else {
+        out += ch;
+      }
+    }
+    return out;
+  }
+
+  let scriptNodes = null;
+  function collectScriptNodes() {
+    scriptNodes = [];
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode(n) {
+        const tag = n.parentNode && n.parentNode.nodeName;
+        if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT') return NodeFilter.FILTER_REJECT;
+        return /[Ѐ-ӿ]/.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    let n;
+    while ((n = walker.nextNode())) scriptNodes.push({ node: n, cyr: n.nodeValue });
+  }
+
+  function setScript(script) {
+    if (!scriptNodes) collectScriptNodes();
+    const latin = script === 'latin';
+    scriptNodes.forEach((e) => { e.node.nodeValue = latin ? translit(e.cyr) : e.cyr; });
+    document.title = latin ? translit('Зикр') : 'Зикр';
+    document.documentElement.setAttribute('lang', latin ? 'uz-Latn' : 'uz');
+    document.querySelectorAll('.script-btn').forEach((b) => {
+      b.classList.toggle('active', b.dataset.script === script);
+    });
+    try { localStorage.setItem('zikr-script', script); } catch(e) {}
+  }
+
+  (function() {
+    let s = 'cyrillic';
+    try { s = localStorage.getItem('zikr-script') || 'cyrillic'; } catch(e) {}
+    setScript(s);
+  })();
 
   // Юклангач иконкани тўғри кўрсатиш
   window.addEventListener('DOMContentLoaded', () => {
