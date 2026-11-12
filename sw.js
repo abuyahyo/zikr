@@ -1,7 +1,7 @@
 // Зикр PWA service worker — network-first strategy.
 // Online: always serve the latest from the network (no stale-cache problem,
 // users never need to clear cache). Offline: fall back to the cached copy.
-const CACHE = 'zikr-v5';
+const CACHE = 'zikr-v6';
 const ASSETS = [
   '.',
   'index.html',
